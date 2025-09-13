@@ -1,0 +1,10 @@
+# Node.js
+leave-request-frontend/node_modules/
+leave-request-frontend/dist/
+
+# .NET
+LeaveRequestBackend/bin/
+LeaveRequestBackend/obj/
+
+# Logs
+*.log
