@@ -2,7 +2,7 @@
 
 A full-stack leave request management system built with **ASP.NET Core** backend and **React + TypeScript** frontend, featuring role-based access control, business rule validation, and responsive design.
 
-## 🏗️ Architecture
+## 🏛️ Architecture
 
 ### Backend (.NET 9)
 - **Framework**: ASP.NET Core Web API
