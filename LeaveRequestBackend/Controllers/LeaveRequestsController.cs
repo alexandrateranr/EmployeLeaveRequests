@@ -114,13 +114,19 @@ namespace LeaveRequestBackend.Controllers
 
         // PUT /api/leaverequests/{id}?managerId=2
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateLeaveStatus(int id, [FromQuery] int managerId, [FromBody] LeaveStatus status)
+        public async Task<IActionResult> UpdateLeaveStatus(int id, [FromQuery] int managerId, [FromBody] string statusString)
         {
             var manager = await _context.Employees.FindAsync(managerId);
             if (manager == null || manager.Role != Role.Manager) return Unauthorized();
 
             var request = await _context.LeaveRequests.FindAsync(id);
             if (request == null) return NotFound();
+
+            // Parse the string status to enum
+            if (!Enum.TryParse<LeaveStatus>(statusString, true, out var status))
+            {
+                return BadRequest("Invalid status. Must be 'Approved' or 'Rejected'.");
+            }
 
             // Business rule: Manager can override auto-rejection for 15+ day requests
             var duration = (request.EndDate - request.StartDate).TotalDays;
@@ -139,13 +145,29 @@ namespace LeaveRequestBackend.Controllers
             return NoContent();
         }
 
-        // DELETE /api/leaverequests/{id}?employeeId=1
+        // DELETE /api/leaverequests/{id}?employeeId=1 (for employees - cancel pending requests)
         [HttpDelete("{id}")]
         public async Task<IActionResult> CancelLeaveRequest(int id, [FromQuery] int employeeId)
         {
             var request = await _context.LeaveRequests.FindAsync(id);
             if (request == null || request.EmployeeId != employeeId) return Unauthorized();
             if (request.Status != LeaveStatus.Pending) return BadRequest("Only pending requests can be canceled");
+
+            _context.LeaveRequests.Remove(request);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        // DELETE /api/leaverequests/{id}/permanent?managerId=2 (for managers - permanently delete any request)
+        [HttpDelete("{id}/permanent")]
+        public async Task<IActionResult> PermanentlyDeleteRequest(int id, [FromQuery] int managerId)
+        {
+            var manager = await _context.Employees.FindAsync(managerId);
+            if (manager == null || manager.Role != Role.Manager) return Unauthorized();
+
+            var request = await _context.LeaveRequests.FindAsync(id);
+            if (request == null) return NotFound();
 
             _context.LeaveRequests.Remove(request);
             await _context.SaveChangesAsync();

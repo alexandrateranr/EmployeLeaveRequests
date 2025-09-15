@@ -19,22 +19,22 @@ type CreateLeaveRequest = {
   reason: string;
 };
 
+
 type CreateRequestFormProps = {
   onCreated: () => void;
-  employeeId: number;
-  error: string | null;
-  setError: (error: string | null) => void;
+  employeeId?: number;
 };
 
-export function CreateRequestForm({ onCreated, employeeId, error, setError }: CreateRequestFormProps) {
+export function CreateRequestForm({ onCreated, employeeId }: CreateRequestFormProps) {
   const [form, setForm] = useState<CreateLeaveRequest>({
-    employeeId,
+    employeeId: employeeId || 0,
     startDate: '',
     endDate: '',
     reason: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
   // Form validation
   const validateForm = (): boolean => {
@@ -87,7 +87,7 @@ export function CreateRequestForm({ onCreated, employeeId, error, setError }: Cr
       await api.post('/LeaveRequests', form);
       onCreated();
       setForm({
-        employeeId,
+        employeeId: form.employeeId,
         startDate: '',
         endDate: '',
         reason: '',
