@@ -38,11 +38,6 @@ A full-stack leave request management system built with **ASP.NET Core** backend
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [Node.js 18+](https://nodejs.org/)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
-
 ### Backend Setup
 ```bash
 cd LeaveRequestBackend
@@ -138,8 +133,10 @@ dotnet test
 The system comes with pre-seeded users:
 
 ### Employees
-- **Alex Employee** (ID: 2) - Regular employee
+- **Alex Employee** (ID: 2) - Regular employee:
+- Name: Alex Employee, Email: alex@company.com
 - **Morgan Manager** (ID: 1) - Manager with approval rights
+- Name: Morgan Manager, Email: morgan@company.com
 
 ## 🎨 Design Decisions
 
@@ -168,30 +165,6 @@ The system comes with pre-seeded users:
 - **Role Authorization**: Server-side role verification for sensitive operations
 - **SQL Injection Protection**: Entity Framework Core provides built-in protection
 
-## 🚀 Deployment
-
-### Backend Deployment
-```bash
-dotnet publish -c Release -o ./publish
-```
-
-### Frontend Deployment
-```bash
-npm run build
-# Deploy the 'dist' folder to your hosting provider
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 🐛 Troubleshooting
 
@@ -204,12 +177,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 **Frontend build errors:**
 - Run `npm install` to install dependencies
-- Check Node.js version (18+ required)
+- Check Node.js version 
 - Clear node_modules and reinstall if needed
 
 **Database issues:**
-- Delete the SQLite database file to reset
 - Check SeedData.cs for initial data
-
-### Support
-For issues and questions, please create an issue in the repository.
